@@ -1,0 +1,32 @@
+; Dupeclean 示例配置（INI）
+; 用法：
+;   python3 dupeclean.py --config dupeclean.ini scan  /media/user/DISK_A -o A.csv
+;   python3 dupeclean.py --config dupeclean.ini compare A.csv B.csv -o ./report
+;
+; 说明：命令行参数优先于本文件；默认会尝试读取当前目录的 dupeclean.ini。
+
+[scan]
+; 忽略小于此大小的文件，支持 50M / 1.5G / 1048576 等写法
+min_size = 50M
+; 来源盘标签，留空则从挂载路径自动推断
+; label = DISK_A
+; 额外忽略的目录名（逗号或换行分隔）
+ignore = .hidden, _trash
+; 额外忽略的扩展名
+ignore_ext = .log, .bak
+; 扩展名白名单（给了就只收这些），留空=不过滤
+; ext = .mkv, .mp4, .avi, .mov
+include_hidden = false
+follow_symlinks = false
+; 是否计算哈希（默认 false）
+hash = false
+algo = sha256
+
+[compare]
+threshold = 0.75
+; pair = 成对列出（默认）；group = 连通分组
+cluster = pair
+sim_algo = auto
+max_bucket = 100
+max_pairs = 5000000
+report_limit = 500

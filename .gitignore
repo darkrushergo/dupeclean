@@ -1,0 +1,28 @@
+# ── 敏感 / 生成的数据：绝不提交（可能包含你的真实文件清单）──
+results/
+report/
+*.index.csv
+*.index.csv.bak
+delete-list-*.csv
+delete-map.txt
+
+# ── 本地配置 ──
+dupeclean.ini
+
+# ── 内部交接文档（不发布）──
+HANDOFF.md
+requirements-answers.md
+
+# ── Python ──
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+
+# ── 备份 / 临时 / 系统 ──
+*.bak
+*.tmp
+*.swp
+.DS_Store
+Thumbs.db

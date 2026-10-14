@@ -1,0 +1,9 @@
+# 路径映射示例（每行 OLD=NEW）。删除脚本会自动读取 CSV 同目录/当前目录下的 delete-map.txt。
+# 作用：把「扫描时记录的路径前缀」替换成「现在实际的挂载点 / Windows 盘符」。
+
+# Linux 示例：换了挂载点
+# /run/media/user/DISK_A=/mnt/disk_a
+
+# Windows 示例：把 Linux 挂载路径映射到盘符（注意结尾反斜杠或斜杠都可）
+# /run/media/user/DISK_A=E:\
+# /run/media/user/DISK_B=F:\
