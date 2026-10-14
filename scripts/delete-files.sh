@@ -13,6 +13,7 @@
 #
 # 说明：
 #   * 处理 action=delete（删文件）与 action=rmdir（仅删空目录，不递归）。
+#   * 删除不可逆！请先演练、核对名单、保留至少一份并备份。详见 DISCLAIMER.md。
 #   * 若传入目录，会自动读取其中所有 delete-list-*.csv。
 #   * 会自动读取同目录下的 delete-map.txt（每行 OLD=NEW，# 开头为注释）。
 #   * 删除名单由 dupeclean 生成；本脚本与 dupeclean 主程序相互独立。
@@ -108,6 +109,15 @@ def remap(path):
             return new.rstrip("/") + path[len(old):]
     return path
 
+
+print("=" * 74)
+print("  DANGER / 危险：本脚本会永久删除文件，无法恢复。")
+print("  外置盘/USB/NAS 通常没有回收站；删除不可逆。")
+print("  模式：" + ("真实删除 (--yes)  >>> 将永久删除 <<<" if do_delete else "演练 (dry-run，不删除)"))
+print("  重复判定为启发式，可能误判。请先演练、核对名单、保留至少一份并先备份。")
+print("  完整免责声明见 DISCLAIMER.md。风险自负。")
+print("=" * 74)
+print()
 
 total = will = done = missing = skipped = failed = 0
 for c in csvs:

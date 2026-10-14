@@ -6,6 +6,10 @@ including disks that **cannot be mounted at the same time**.
 > **Rule #1: it is read-only.** It never deletes, moves or modifies any original
 > file. Reports are just lists; deleting is always a separate, explicit step.
 
+> ## ⚠️ Important warning · Disclaimer
+> `scan` / `compare` / `relabel` / `web` are read-only; however the **delete-list CSVs** and the bundled **delete scripts permanently delete files with no recovery** (external drives usually have no trash). Detection is **heuristic and can be wrong**. **Before using the delete scripts: dry-run first, review the list, keep at least one copy, and back up. You assume all risk.**
+> Full text: **[DISCLAIMER.md](DISCLAIMER.md)**.
+
 Typical use case: you have several USB/NTFS backup drives and want to find
 duplicates **across** them (and within each). Because they can't all be plugged
 in at once, the work is split into two phases:

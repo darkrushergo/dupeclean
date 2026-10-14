@@ -15,6 +15,7 @@
 #
 # 说明：
 #   * 处理 action=delete（删文件）与 action=rmdir（仅删空目录，不递归）。
+#   * 删除不可逆！请先演练、核对名单、保留至少一份并备份。详见 DISCLAIMER.md。
 #   * 自动读取 CSV 同目录或当前目录下的 delete-map.txt（每行 OLD=NEW）。
 #   * 逻辑与 Linux 版 scripts/delete-files.sh 一致。
 
@@ -92,6 +93,15 @@ foreach ($t in $Path) {
     [void]$csvs.Add($full)
   }
 }
+
+Write-Host ("=" * 74)
+Write-Host "  DANGER: this script permanently deletes files with no recovery."
+Write-Host "  External drives / USB / NAS usually have no trash; deletion is irreversible."
+Write-Host ("  Mode: " + $(if ($Yes) { "REAL DELETE (-Yes)  >>> will permanently delete <<<" } else { "DRY-RUN (list only)" }))
+Write-Host "  Detection is heuristic and can be wrong. Dry-run, review, keep one copy, back up first."
+Write-Host "  Full disclaimer: DISCLAIMER.md. You assume all risk."
+Write-Host ("=" * 74)
+Write-Host ""
 
 $total = 0; $will = 0; $done = 0; $missing = 0; $skipped = 0; $failed = 0
 foreach ($c in $csvs) {

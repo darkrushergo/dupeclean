@@ -164,7 +164,7 @@ MESSAGES = {
         "rpt.hash_off": "- 哈希：关（A 组为“同名同大小”推断）",
         "rpt.size_filter": "- 大小过滤：{rule}",
         "rpt.cand": "- 候选对生成：{pairs} 对；因桶过大跳过的桶：{skipped}",
-        "rpt.disclaimer": "> ⚠️ 本工具只读，不删除、不移动任何文件。以下清单仅供人工判断。",
+        "rpt.disclaimer": "> ⚠️ 本工具只读；但随附的删除脚本会**永久删除**文件、无法恢复，且重复判定为启发式、可能误判。删除前请先演练、核对名单、保留至少一份并备份。详见 DISCLAIMER.md。",
         "rpt.a_hash": "## A. 精确重复组（哈希完全相同）",
         "rpt.a_infer": "## A. 疑似精确重复组（归一化文件名相同 + 大小相同）",
         "rpt.a_count": "共 {n} 组，涉及 {m} 个文件。",
@@ -236,7 +236,7 @@ MESSAGES = {
         "rpt.hash_off": "- Hashing: off (group A inferred from same name + size)",
         "rpt.size_filter": "- Size filter: {rule}",
         "rpt.cand": "- Candidate pairs: {pairs}; oversized buckets skipped: {skipped}",
-        "rpt.disclaimer": "> ⚠️ This tool is read-only. It never deletes or moves anything. Review manually.",
+        "rpt.disclaimer": "> ⚠️ This tool is read-only; but the bundled delete scripts **permanently delete** files with no recovery, and detection is heuristic and can be wrong. Before deleting: dry-run, review the list, keep one copy and back up. See DISCLAIMER.md.",
         "rpt.a_hash": "## A. Exact duplicates (identical hash)",
         "rpt.a_infer": "## A. Likely exact duplicates (same normalized name + size)",
         "rpt.a_count": "{n} groups, {m} files.",
@@ -2006,6 +2006,7 @@ h1{margin:0;font-size:20px}.badge{font-size:12px;background:var(--bd);color:var(
 .hdr-right{display:flex;gap:16px;flex-wrap:wrap}
 .picker{font-size:12px;color:var(--muted);display:flex;gap:8px;align-items:center}
 .picker select{width:auto;padding:5px 8px}
+.warnbar{background:#5b1e1e;color:#ffd9d9;border:1px solid #a33;border-radius:8px;margin:10px 24px 0;padding:8px 12px;font-size:13px}
 .tabs{display:flex;gap:8px;padding:12px 24px 0}
 .tab{background:transparent;color:var(--muted);border:1px solid var(--bd);border-bottom:none;border-radius:8px 8px 0 0;padding:8px 16px;cursor:pointer;font-size:14px}
 .tab.active{background:var(--card);color:var(--fg)}
@@ -2061,6 +2062,7 @@ tr.on-disk{background:rgba(216,166,87,.10)}
     </div>
   </div>
 </header>
+<div class="warnbar"><span data-i18n="warn.banner">⚠️ 只读工具；但生成的删除名单与删除脚本会永久删除文件、无法恢复，重复判定也可能误判。请先演练、核对并备份，风险自负。详见仓库 DISCLAIMER.md。</span></div>
 <nav class="tabs">
   <button class="tab active" data-tab="scan" data-i18n="tab.scan">① 扫描 Scan</button>
   <button class="tab" data-tab="compare" data-i18n="tab.compare">② 对比 Compare</button>
@@ -2161,6 +2163,9 @@ tr.on-disk{background:rgba(216,166,87,.10)}
   <div id="rev-folders"></div>
   <div id="rev-groups"></div>
   <div class="row-actions">
+    <label class="inline-check"><input type="checkbox" id="rev-ack"> <span data-i18n="rev.ack">我已阅读并理解免责声明：删除不可恢复，风险自负</span></label>
+  </div>
+  <div class="row-actions">
     <button class="primary" onclick="generateDeleteList()" data-i18n="rev.gen">生成删除名单 CSV</button>
     <span class="muted" data-i18n="rev.note">勾选要删除的文件/文件夹（同一组建议保留一份）。本工具只生成名单，不会删除。</span>
   </div>
@@ -2177,11 +2182,11 @@ tr.on-disk{background:rgba(216,166,87,.10)}
 /* ---------------- i18n ---------------- */
 const I18N = {
   zh: {
-    "hdr.badge":"只读 · 不会删除任何文件","hdr.subtitle":"扫描每块盘生成索引 → 同时对比多个索引 → 复核并生成删除名单。","hdr.theme":"护眼主题","hdr.lang":"语言",
+    "hdr.badge":"只读 · 不会删除任何文件","warn.banner":"⚠️ 只读工具；但生成的删除名单与删除脚本会永久删除文件、无法恢复，重复判定也可能误判。请先演练、核对并备份，风险自负。详见仓库 DISCLAIMER.md。","hdr.subtitle":"扫描每块盘生成索引 → 同时对比多个索引 → 复核并生成删除名单。","hdr.theme":"护眼主题","hdr.lang":"语言",
     "tab.scan":"① 扫描 Scan","tab.compare":"② 对比 Compare","tab.review":"③ 复核 · 删除名单",
     "scan.paths":"要扫描的目录（每行一个，也可点击下方磁盘）","scan.show_sys":"显示系统挂载点（/、/boot、/snap 等）","scan.name":"索引名称（自动生成，可改）","scan.label":"来源盘标签（随所选磁盘自动变化）","scan.minsize":"最小文件大小","scan.algo":"哈希算法","scan.hidden":"包含隐藏项","scan.symlink":"跟随软链","scan.hash":"计算哈希（慢，默认关闭）","scan.ignore":"额外忽略目录（逗号分隔）","scan.ignoreext":"额外忽略扩展名","scan.ext":"扩展名白名单（可空）","scan.workdir":"结果目录：","scan.workdir2":"（索引存 indexes/，报告存 reports/）","scan.start":"开始扫描",
     "cmp.avail":"可用索引 CSV（点击选择 / 取消）","cmp.refresh":"刷新","cmp.select_all":"全选","cmp.clear":"清空","cmp.name":"报告名称（留空=按时间自动命名）","cmp.threshold":"相似度阈值","cmp.cluster":"B 输出形态","cmp.pair":"pair（成对）","cmp.group":"group（连通分组）","cmp.simalgo":"相似度算法","cmp.sizediff":"非视频大小差上限","cmp.start":"开始对比",
-    "rev.report":"报告（对比结果）","rev.refresh":"刷新","rev.disk":"硬盘","rev.disk_first":"所选盘排最前","rev.disk_only":"只看所选盘","rev.check_disk_all":"勾选全部所选盘副本","rev.show":"显示","rev.show_all":"全部","rev.show_exact":"精确相似","rev.show_suspect":"可疑相似","rev.group_sort":"组排序","rev.gs_size":"按组内最大文件大小 ↓","rev.gs_count":"按文件数 ↓","rev.gs_sim":"按相似度 ↓","rev.gs_kind":"按类型","rev.member_sort":"组内排序","rev.ms_size_desc":"大小 ↓（优先删大的）","rev.ms_size_asc":"大小 ↑","rev.ms_time_desc":"时间 新→旧","rev.ms_time_asc":"时间 旧→新","rev.ms_path":"路径","rev.folders_only":"只显示重复文件夹","rev.hide_folder_files":"隐藏已选文件夹内的文件","rev.refresh_folders":"刷新重复文件夹","rev.gen":"生成删除名单 CSV","rev.note":"勾选要删除的文件/文件夹（同一组建议保留一份）。本工具只生成名单，不会删除。",
+    "rev.report":"报告（对比结果）","rev.refresh":"刷新","rev.disk":"硬盘","rev.disk_first":"所选盘排最前","rev.disk_only":"只看所选盘","rev.check_disk_all":"勾选全部所选盘副本","rev.show":"显示","rev.show_all":"全部","rev.show_exact":"精确相似","rev.show_suspect":"可疑相似","rev.group_sort":"组排序","rev.gs_size":"按组内最大文件大小 ↓","rev.gs_count":"按文件数 ↓","rev.gs_sim":"按相似度 ↓","rev.gs_kind":"按类型","rev.member_sort":"组内排序","rev.ms_size_desc":"大小 ↓（优先删大的）","rev.ms_size_asc":"大小 ↑","rev.ms_time_desc":"时间 新→旧","rev.ms_time_asc":"时间 旧→新","rev.ms_path":"路径","rev.folders_only":"只显示重复文件夹","rev.hide_folder_files":"隐藏已选文件夹内的文件","rev.refresh_folders":"刷新重复文件夹","rev.gen":"生成删除名单 CSV","rev.ack":"我已阅读并理解免责声明：删除不可恢复，风险自负","msg.ack_first":"请先勾选上方「我已阅读并理解免责声明」","rev.note":"勾选要删除的文件/文件夹（同一组建议保留一份）。本工具只生成名单，不会删除。",
     "job.title":"运行日志","job.waiting":"等待任务…","job.running":"⏳ 运行中","job.done":"✅ 完成","job.error":"❌ 出错",
     "kind.exact":"疑似精确重复","kind.same":"同名不同内容","kind.similar":"相似候选",
     "btn.keep_largest":"只保留最大（勾选其余）","btn.keep_first":"只保留第一个（勾选其余）","btn.clear_group":"清空本组","btn.check_disk":"勾选本组【{d}】的副本",
@@ -2193,11 +2198,11 @@ const I18N = {
     "msg.scan_done":"索引已生成：","msg.report_dir":"报告目录：","msg.download":"下载","msg.select_disk_first":"请先在「硬盘」里选择一块盘","msg.pick_report2":"请先选择报告","msg.pick_one":"请至少勾选一个文件或一个重复文件夹","msg.start_fail":"无法启动任务：","msg.gen_fail":"生成失败：","msg.pick_index":"请先点选至少一个索引 CSV","msg.idx_summary":"已选 {n} 个","msg.hdr_disk":"来源盘","msg.hdr_path":"路径","msg.hdr_size":"大小","msg.hdr_mtime":"修改时间","msg.hdr_count":"文件数","msg.hdr_folder":"文件夹"
   },
   en: {
-    "hdr.badge":"read-only · deletes nothing","hdr.subtitle":"Scan each disk into an index → compare several indexes → review and produce a delete list.","hdr.theme":"Theme","hdr.lang":"Language",
+    "hdr.badge":"read-only · deletes nothing","warn.banner":"⚠️ Read-only tool; but the delete lists and scripts permanently delete files with no recovery, and detection can be wrong. Dry-run, review and back up first — you assume all risk. See DISCLAIMER.md.","hdr.subtitle":"Scan each disk into an index → compare several indexes → review and produce a delete list.","hdr.theme":"Theme","hdr.lang":"Language",
     "tab.scan":"① Scan","tab.compare":"② Compare","tab.review":"③ Review · delete list",
     "scan.paths":"Directories to scan (one per line; or click a disk below)","scan.show_sys":"Show system mounts (/ , /boot, /snap …)","scan.name":"Index name (auto, editable)","scan.label":"Source disk label (updates with the chosen disk)","scan.minsize":"Minimum file size","scan.algo":"Hash algorithm","scan.hidden":"Include hidden","scan.symlink":"Follow symlinks","scan.hash":"Compute hashes (slow, default off)","scan.ignore":"Extra ignored dirs (comma-separated)","scan.ignoreext":"Extra ignored extensions","scan.ext":"Extension whitelist (optional)","scan.workdir":"Results dir:","scan.workdir2":"(indexes/ and reports/)","scan.start":"Start scan",
     "cmp.avail":"Available index CSVs (click to select)","cmp.refresh":"Refresh","cmp.select_all":"Select all","cmp.clear":"Clear","cmp.name":"Report name (blank = timestamp)","cmp.threshold":"Similarity threshold","cmp.cluster":"B output","cmp.pair":"pair","cmp.group":"group (connected)","cmp.simalgo":"Similarity algorithm","cmp.sizediff":"Non-video max size diff","cmp.start":"Start compare",
-    "rev.report":"Report (compare result)","rev.refresh":"Refresh","rev.disk":"Disk","rev.disk_first":"Chosen disk first","rev.disk_only":"Only chosen disk","rev.check_disk_all":"Check all copies on chosen disk","rev.show":"Show","rev.show_all":"All","rev.show_exact":"Exact-like","rev.show_suspect":"Suspicious","rev.group_sort":"Group sort","rev.gs_size":"by max file size ↓","rev.gs_count":"by file count ↓","rev.gs_sim":"by similarity ↓","rev.gs_kind":"by kind","rev.member_sort":"Member sort","rev.ms_size_desc":"size ↓ (big first)","rev.ms_size_asc":"size ↑","rev.ms_time_desc":"time new→old","rev.ms_time_asc":"time old→new","rev.ms_path":"path","rev.folders_only":"Only duplicate folders","rev.hide_folder_files":"Hide files inside selected folders","rev.refresh_folders":"Refresh folders","rev.gen":"Generate delete list CSV","rev.note":"Check files/folders to delete (keep one per group). This only writes a list; it never deletes.",
+    "rev.report":"Report (compare result)","rev.refresh":"Refresh","rev.disk":"Disk","rev.disk_first":"Chosen disk first","rev.disk_only":"Only chosen disk","rev.check_disk_all":"Check all copies on chosen disk","rev.show":"Show","rev.show_all":"All","rev.show_exact":"Exact-like","rev.show_suspect":"Suspicious","rev.group_sort":"Group sort","rev.gs_size":"by max file size ↓","rev.gs_count":"by file count ↓","rev.gs_sim":"by similarity ↓","rev.gs_kind":"by kind","rev.member_sort":"Member sort","rev.ms_size_desc":"size ↓ (big first)","rev.ms_size_asc":"size ↑","rev.ms_time_desc":"time new→old","rev.ms_time_asc":"time old→new","rev.ms_path":"path","rev.folders_only":"Only duplicate folders","rev.hide_folder_files":"Hide files inside selected folders","rev.refresh_folders":"Refresh folders","rev.gen":"Generate delete list CSV","rev.ack":"I have read the disclaimer: deletion is irreversible and I assume all risk","msg.ack_first":"Please tick the disclaimer acknowledgement first","rev.note":"Check files/folders to delete (keep one per group). This only writes a list; it never deletes.",
     "job.title":"Log","job.waiting":"waiting…","job.running":"⏳ running","job.done":"✅ done","job.error":"❌ error",
     "kind.exact":"Likely exact duplicate","kind.same":"Same name, different content","kind.similar":"Similar candidate",
     "btn.keep_largest":"Keep largest (check the rest)","btn.keep_first":"Keep first (check the rest)","btn.clear_group":"Clear group","btn.check_disk":"Check copies on [{d}]",
@@ -2273,7 +2278,7 @@ function keepLargest(gid){ const card=document.querySelector('.card[data-gid="'+
 function clearGroup(gid){ const card=document.querySelector('.card[data-gid="'+gid+'"]'); if(card) card.querySelectorAll('.delbox').forEach(function(b){ b.checked=false; }); }
 function checkDisk(gid){ const disk=($('rev-disk')||{}).value; if(!disk||disk==='all'){ alert(T('msg.select_disk_first')); return; } const card=document.querySelector('.card[data-gid="'+gid+'"]'); if(!card) return; card.querySelectorAll('.delbox').forEach(function(b){ if(b.dataset.label===disk) b.checked=true; }); }
 function checkAllDisk(){ const disk=($('rev-disk')||{}).value; if(!disk||disk==='all'){ alert(T('msg.select_disk_first')); return; } document.querySelectorAll('.delbox').forEach(function(b){ if(b.dataset.label===disk) b.checked=true; }); }
-async function generateDeleteList(){ const dir=$('rev-report').value; if(!dir){ alert(T('msg.pick_report2')); return; } const boxes=document.querySelectorAll('.delbox:checked'); const paths=Array.prototype.map.call(boxes,function(b){return b.value;}); const folders=Array.from(selectedFolders); if(!paths.length && !folders.length){ alert(T('msg.pick_one')); return; } try{ const j=await api('/api/deletelist',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({dir:dir,paths:paths,folders:folders})}); const pf=folders.length?T('msg.gen_pf',{n:folders.length}):''; let h='<p>'+T('msg.gen_ok',{total:j.total,files:j.files.length,pf:pf})+'</p><ul>'; j.files.forEach(function(f){ h+='<li><code>'+esc(f.label)+'</code> · '+f.count+' · <code>'+esc(f.path)+'</code> · <a href="/api/download?path='+encodeURIComponent(f.path)+'">'+esc(T('msg.download'))+'</a></li>'; }); h+='</ul><p class="muted">'+esc(T('msg.gen_hint'))+'</p>'; $('rev-result').innerHTML=h; }catch(e){ alert(T('msg.gen_fail')+e.message); } }
+async function generateDeleteList(){ if(!($('rev-ack')||{}).checked){ alert(T('msg.ack_first')); return; } const dir=$('rev-report').value; if(!dir){ alert(T('msg.pick_report2')); return; } const boxes=document.querySelectorAll('.delbox:checked'); const paths=Array.prototype.map.call(boxes,function(b){return b.value;}); const folders=Array.from(selectedFolders); if(!paths.length && !folders.length){ alert(T('msg.pick_one')); return; } try{ const j=await api('/api/deletelist',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({dir:dir,paths:paths,folders:folders})}); const pf=folders.length?T('msg.gen_pf',{n:folders.length}):''; let h='<p>'+T('msg.gen_ok',{total:j.total,files:j.files.length,pf:pf})+'</p><ul>'; j.files.forEach(function(f){ h+='<li><code>'+esc(f.label)+'</code> · '+f.count+' · <code>'+esc(f.path)+'</code> · <a href="/api/download?path='+encodeURIComponent(f.path)+'">'+esc(T('msg.download'))+'</a></li>'; }); h+='</ul><p class="muted">'+esc(T('msg.gen_hint'))+'</p>'; $('rev-result').innerHTML=h; }catch(e){ alert(T('msg.gen_fail')+e.message); } }
 
 /* ---------------- 任务 ---------------- */
 function poll(){ if(timer) clearTimeout(timer); timer=setTimeout(poll, 600); if(!currentJob) return; api('/api/job?id='+currentJob).then(function(j){ $('job-status').textContent = j.status==='running'?T('job.running'):(j.status==='done'?T('job.done'):T('job.error')); $('job-log').textContent = j.log || ''; $('job-log').scrollTop = $('job-log').scrollHeight; if(j.status!=='running'){ const done=j; currentJob=null; renderResult(done); } }).catch(function(){}); }
