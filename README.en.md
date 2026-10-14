@@ -5,6 +5,8 @@
 [![Python 3.8+](https://img.shields.io/badge/python-3.8%2B-blue.svg)](https://www.python.org/)
 
 A **read-only**, two-phase tool to find duplicate files across multiple disks,
+
+> China mirror (Gitee): https://gitee.com/darkrushergo/dupeclean
 including disks that **cannot be mounted at the same time**.
 
 > **Rule #1: it is read-only.** It never deletes, moves or modifies any original
