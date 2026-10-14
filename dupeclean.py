@@ -275,6 +275,9 @@ MESSAGES = {
 def resolve_lang(value: Optional[str] = None) -> str:
     if value and value != "auto":
         return value if value in MESSAGES else "en"
+    envlang = os.environ.get("DUPCLEAN_LANG")
+    if envlang and envlang != "auto":
+        return envlang if envlang in MESSAGES else "en"
     env = (os.environ.get("LC_ALL") or os.environ.get("LC_MESSAGES")
            or os.environ.get("LANG") or "")
     env = env.lower()
@@ -2779,11 +2782,11 @@ def _prescan_lang(argv: Sequence[str]) -> Optional[str]:
 def main(argv: Optional[Sequence[str]] = None) -> int:
     if argv is None:
         argv = sys.argv[1:]
-    set_lang(_prescan_lang(list(argv)) or os.environ.get("DUPCLEAN_LANG"))
+    set_lang(_prescan_lang(list(argv)) or "auto")
     parser = build_parser()
     argv = apply_config(parser, argv)
     args = parser.parse_args(argv)
-    set_lang(getattr(args, "lang", None) or os.environ.get("DUPCLEAN_LANG"))
+    set_lang(getattr(args, "lang", "auto"))
     return int(args.func(args))
 
 
