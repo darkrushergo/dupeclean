@@ -1,5 +1,9 @@
 # Dupeclean
 
+[![tests](https://github.com/darkrushergo/dupeclean/actions/workflows/tests.yml/badge.svg)](https://github.com/darkrushergo/dupeclean/actions/workflows/tests.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+[![Python 3.8+](https://img.shields.io/badge/python-3.8%2B-blue.svg)](https://www.python.org/)
+
 A **read-only**, two-phase tool to find duplicate files across multiple disks,
 including disks that **cannot be mounted at the same time**.
 

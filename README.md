@@ -1,5 +1,9 @@
 # Dupeclean
 
+[![tests](https://github.com/darkrushergo/dupeclean/actions/workflows/tests.yml/badge.svg)](https://github.com/darkrushergo/dupeclean/actions/workflows/tests.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+[![Python 3.8+](https://img.shields.io/badge/python-3.8%2B-blue.svg)](https://www.python.org/)
+
 只读的 **跨盘重复文件「扫描 / 对比」** 两阶段工具。
 
 > **铁律：全流程只读。** 本工具绝不删除、移动或修改任何原始文件；报告只输出清单与提示，删不删由你自己决定。
